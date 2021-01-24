@@ -1,8 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
-import Home from './src/Home'
-import styles from './src/Styles'
+import Home from './src/screens/home'
+import styles from './src/screens/styles'
 
 
 import * as React from 'react';
@@ -10,19 +10,33 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
+import { useFonts } from 'expo-font';
+
+
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+
+  const [loaded] = useFonts({
+       RobotoMonoRegular: require('./assets/fonts/RobotoMono-Regular.ttf'),
+       RobotoMonoItalic: require('./assets/fonts/RobotoMono-Italic.ttf'),
+       RobotoMonoBold: require('./assets/fonts/RobotoMono-Bold.ttf'),
+
+     });
+
+     if (!loaded) {
+       return null;
+     }
   return (
       <NavigationContainer>
         <Tab.Navigator
           screenOptions={({ route }) => ({
             tabBarIcon: ({ focused, color, size }) => {
-              if (route.name === 'Home') {
+              if (route.name === 'Write') {
                 return (
                   <Icon name="md-checkmark-circle" size={32} color="green" />
                 );
-              } else if (route.name === 'Settings') {
+              } else if (route.name === 'Read') {
                 return (
                   <Icon
                     name={focused ? 'ios-list-box' : 'ios-list'}
@@ -38,8 +52,8 @@ export default function App() {
             inactiveTintColor: 'gray',
           }}
         >
-          <Tab.Screen name="Home" component={HomeScreen}/>
-          <Tab.Screen name="Settings" component={SettingsScreen} />
+          <Tab.Screen name="Write" component={HomeScreen}/>
+          <Tab.Screen name="Read" component={SettingsScreen} />
         </Tab.Navigator>
       </NavigationContainer>
 
