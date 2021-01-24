@@ -1,9 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
-import Home from './src/screens/home'
-import styles from './src/screens/styles'
-
+import Write from './src/screens/write'
+import Archive from './src/screens/archive'
+import { COLOR_PRIMARY, COLOR_SECONDARY, COLOR_TEXT } from './src/styles/common';
 
 import * as React from 'react';
 import Icon from "react-native-vector-icons/Ionicons";
@@ -18,23 +18,28 @@ const Tab = createBottomTabNavigator();
 export default function App() {
 
   const [loaded] = useFonts({
-       RobotoMonoRegular: require('./assets/fonts/RobotoMono-Regular.ttf'),
-       RobotoMonoItalic: require('./assets/fonts/RobotoMono-Italic.ttf'),
-       RobotoMonoBold: require('./assets/fonts/RobotoMono-Bold.ttf'),
+    RobotoMonoRegular: require('./assets/fonts/RobotoMono-Regular.ttf'),
+    RobotoMonoItalic: require('./assets/fonts/RobotoMono-Italic.ttf'),
+    RobotoMonoBold: require('./assets/fonts/RobotoMono-Bold.ttf'),
 
-     });
+  });
 
-     if (!loaded) {
-       return null;
-     }
+  if (!loaded) {
+    return null;
+  }
   return (
       <NavigationContainer>
+      <StatusBar backgroundColor={COLOR_PRIMARY} />
         <Tab.Navigator
           screenOptions={({ route }) => ({
             tabBarIcon: ({ focused, color, size }) => {
               if (route.name === 'Write') {
                 return (
-                  <Icon name="md-checkmark-circle" size={32} color="green" />
+                  <Icon
+                    name={focused ? 'ios-add-circle' : 'ios-add'}
+                    size={size}
+                    color={color}
+                    />
                 );
               } else if (route.name === 'Read') {
                 return (
@@ -48,18 +53,21 @@ export default function App() {
             },
           })}
           tabBarOptions={{
-            activeTintColor: 'tomato',
+            activeTintColor: COLOR_TEXT,
             inactiveTintColor: 'gray',
+            showLabel: false,
+            style: {
+              backgroundColor: COLOR_SECONDARY,
+            },
           }}
         >
-          <Tab.Screen name="Write" component={HomeScreen}/>
-          <Tab.Screen name="Read" component={SettingsScreen} />
+          <Tab.Screen name="Write" component={WriteScreen}/>
+          <Tab.Screen name="Read" component={ArchiveScreen} />
         </Tab.Navigator>
       </NavigationContainer>
 
   );
 }
-
 
 const containerStyle = StyleSheet.create({
   container: {
@@ -71,20 +79,10 @@ const containerStyle = StyleSheet.create({
 });
 
 
-function HomeScreen() {
-  return (
-    <Home />
-  );
+function WriteScreen(){
+  return <Write />
 }
 
-
-
-function SettingsScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Settings!</Text>
-      <Icon name="md-checkmark-circle" size={32} color="green" />
-      <Text>Settings!</Text>
-    </View>
-  );
+function ArchiveScreen() {
+  return <Archive />
 }
